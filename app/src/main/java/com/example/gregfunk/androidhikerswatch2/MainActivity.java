@@ -1,6 +1,7 @@
 package com.example.gregfunk.androidhikerswatch2;
 
 import android.content.Context;
+import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
@@ -9,6 +10,10 @@ import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
@@ -53,6 +58,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Log.i("bearing", String.valueOf(bearing));
         Log.i("speed", String.valueOf(speed));
         Log.i("accuracy", String.valueOf(accuracy));
+
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        try {
+            List<Address> listAddresses = geocoder.getFromLocation(lat, lng, 1);
+
+            if (listAddresses != null && listAddresses.size() > 0) {
+                Log.i("Place Info", listAddresses.get(0).toString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override
