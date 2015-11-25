@@ -10,12 +10,21 @@ import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
+
+    TextView tlat;
+    TextView tlng;
+    TextView taltitude;
+    TextView tbearing;
+    TextView tspeed;
+    TextView taccuracy;
+    TextView taddress;
 
     LocationManager locationManager;
     String provider;
@@ -25,8 +34,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tlat = (TextView) findViewById(R.id.lat);
+        tlng = (TextView) findViewById(R.id.lng);
+        taltitude = (TextView) findViewById(R.id.altitude);
+        tbearing = (TextView) findViewById(R.id.bearing);
+        tspeed = (TextView) findViewById(R.id.speed);
+        taccuracy = (TextView) findViewById(R.id.accuracy);
+        taddress = (TextView) findViewById(R.id.address);
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
+
+        Location location = locationManager.getLastKnownLocation(provider);
+        onLocationChanged(location);
     }
 
     @Override
@@ -48,29 +68,32 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Double lat = location.getLatitude();
         Double lng = location.getLongitude();
         Double alt = location.getAltitude();
-        float bearing = location.getBearing();
-        float speed = location.getSpeed();
-        float accuracy = location.getAccuracy();
+        Float bearing = location.getBearing();
+        Float speed = location.getSpeed();
+        Float accuracy = location.getAccuracy();
 
-        Log.i("Latitude", String.valueOf(lat));
-        Log.i("lng", String.valueOf(lng));
-        Log.i("altitude", String.valueOf(alt));
-        Log.i("bearing", String.valueOf(bearing));
-        Log.i("speed", String.valueOf(speed));
-        Log.i("accuracy", String.valueOf(accuracy));
+        tlat.setText("Latitude: " + lat.toString());
+        tlng.setText("Longitude:" + lng.toString());
+        taltitude.setText("Altitude: " + alt.toString() + "m");
+        tbearing.setText("Beaning: " + bearing.toString());
+        tspeed.setText("Speed: " + speed.toString() + "m/s");
+        taccuracy.setText("Accuracy: " + accuracy.toString() + "m");
 
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         try {
             List<Address> listAddresses = geocoder.getFromLocation(lat, lng, 1);
 
             if (listAddresses != null && listAddresses.size() > 0) {
-                Log.i("Place Info", listAddresses.get(0).toString());
+                String addressHolder = "";
+                for (int i=0; i <= listAddresses.get(0).getMaxAddressLineIndex(); i++) {
+                    addressHolder += listAddresses.get(0).getAddressLine(i) + "\n";
+                }
+                taddress.setText("Address:\n" + addressHolder);
             }
         } catch (IOException e) {
             e.printStackTrace();
+
         }
-
-
     }
 
     @Override

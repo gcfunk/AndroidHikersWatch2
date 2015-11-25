@@ -56,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Altitude: "
-        android:id="@+id/alt"
+        android:id="@+id/altitude"
         android:textSize="20sp"
         android:textColor="#e5e4e4"
         android:shadowColor="#1a1a1a"
@@ -72,7 +72,7 @@
         android:textSize="20sp"
         android:textColor="#e5e4e4"
         android:shadowColor="#1a1a1a"
-        android:layout_below="@+id/alt"
+        android:layout_below="@+id/altitude"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
 
